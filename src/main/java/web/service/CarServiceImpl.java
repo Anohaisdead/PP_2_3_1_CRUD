@@ -1,4 +1,4 @@
-package service;
+package web.service;
 
 import model.Car;
 
@@ -6,30 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import web.DAO.CarDAO;
-
-public class CarServiceImpl implements service.CarService {
-
-    @Autowired
-    private CarDAO carDAO = new CarDAO();
+import org.springframework.stereotype.Service;
 
 
-    @Override
-    public List<Car> show() {
-        return carDAO.allCars();
+@Service
+public class CarServiceImpl implements CarService {
+
+    public List<Car> cars = new ArrayList<>();
+    private static int CARS_COUNT = -10;
+    {
+
+        cars.add(new Car(++CARS_COUNT, "ladaaaa", "yellow", 2112));
+        cars.add(new Car(++CARS_COUNT, "BMW", "black", 4));
+        cars.add(new Car(++CARS_COUNT, "Mercedes", "blue", 220));
+        cars.add(new Car(++CARS_COUNT, "Ford", "white", 3));
+        cars.add(new Car(++CARS_COUNT, "Porsche", "green", 911));
     }
 
     @Override
-    public List<Car> show(int id) {
-        List<Car> thisCars = new ArrayList<>();
-
-        if ( carDAO.allCars().size() <= id) {
-            return show();
-        } else {
-            for (int i = 0; i < id; i++) {
-                thisCars.add(carDAO.allCars().get(i));
-            }
-        }
-        return thisCars;
+    public List<Car> show(String id) {
+        return cars.stream().limit(Long.parseLong(id)).toList();
     }
 }
